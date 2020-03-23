@@ -1,0 +1,44 @@
+{
+  "name": "genome-almanac-api",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "start": "node dist/server.js",
+    "test": "jest --detectOpenHandles",
+    "debug": "node --inspect dist/server.js",
+    "prettier": "prettier --write ./src/**/*.ts",
+    "precommit": "yarn prettier"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^0.12.1",
+    "apollo-server-express": "^2.10.1",
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "firebase-admin": "^8.8.0",
+    "graphql": "^14.3.1",
+    "graphql-import": "^0.7.1",
+    "graphql-import-node": "^0.0.4",
+    "http-proxy-middleware": "^1.0.0",
+    "pg-promise": "^10.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^24.0.23",
+    "@types/supertest": "^2.0.8",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.3"
+  },
+  "prettier": {
+    "printWidth": 160,
+    "tabWidth": 4,
+    "arrowParens": "always",
+    "parser": "typescript"
+  }
+}

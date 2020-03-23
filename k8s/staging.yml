@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genome-almanac-api-deployment
+  labels:
+    app: genome-almanac-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: genome-almanac-api
+  template:
+    metadata:
+      labels:
+        app: genome-almanac-api
+    spec:
+      containers:
+      - name: genome-almanac-api
+        image: gcr.io/devenv-215523/genome-almanac-api:${SERVICE_VERSION}
+        ports:
+        - containerPort: 3000
+        env:
+          - name: SERVICE_0
+            value: "signal>http://signal-service-service"
+          - name: SERVICE_1
+            value: "genes>http://genes-service-service"
+          - name: SERVICE_2
+            value: "motifs>http://motifs-service-service"
+          - name: SERVICE_3
+            value: "histone-aggregate>http://histone-aggregate-service-service"
+          #- name: SERVICE_4
+          #  value: "peaks>http://peaks-service-service"
+          #- name: SERVICE_5
+          #  value: "annotations>http://annotations-service-service"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: genome-almanac-api-service
+  labels:
+    app: genome-almanac-api
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: genome-almanac-api
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ga-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "staging-ga-external-ip"
+    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/issue-temporary-certificate: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
+spec:
+  backend:
+    serviceName: genome-almanac-api-service
+    servicePort: 80
+  tls:
+  - secretName: ga-tls
+    hosts:
+    - ga.staging.wenglab.org
