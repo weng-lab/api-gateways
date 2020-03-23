@@ -28,9 +28,11 @@ spec:
             value: "motifs>http://motifs-service-service"
           - name: SERVICE_3
             value: "histone-aggregate>http://histone-aggregate-service-service"
-          #- name: SERVICE_4
-          #  value: "peaks>http://peaks-service-service"
+          - name: SERVICE_4
+            value: "factor>http://factor-service-service"  
           #- name: SERVICE_5
+          #  value: "peaks>http://peaks-service-service"
+          #- name: SERVICE_6
           #  value: "annotations>http://annotations-service-service"
         readinessProbe:
           httpGet:
