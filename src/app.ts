@@ -4,6 +4,7 @@ import { ApolloGateway, RemoteGraphQLDataSource } from "@apollo/gateway";
 import express, { Express, Request, Response } from "express";
 import { configureRestProxies } from "./util/restProxy";
 import { appendUrl, Service } from './util/misc';
+import compression from 'compression';
 
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
@@ -36,6 +37,9 @@ function createGateway(services: Service[]): ApolloServer {
 type AddMiddleware = (app: Express) => void;
 const createApp = (services: Service[], addMiddleware: AddMiddleware): Express => {
     const app = express();
+
+    app.use(compression());
+
     const port = process.env.PORT || 3000;
     app.set("port", port);
 
