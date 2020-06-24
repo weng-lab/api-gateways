@@ -34,8 +34,8 @@ spec:
             value: "peaks>http://peaks-service-service"
           - name: SERVICE_6
             value: "methyl>http://methyl-service-service"
-          #- name: SERVICE_7
-          #  value: "annotations>http://annotations-service-service"
+          - name: SERVICE_7
+            value: "gene-enhancer-interactions>http://gene-enhancer-interaction-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
@@ -76,6 +76,6 @@ spec:
     serviceName: genome-almanac-api-service
     servicePort: 80
   tls:
-  - secretName: ga-tls
+  - secretName: ga-tls-s
     hosts:
     - ga.staging.wenglab.org
