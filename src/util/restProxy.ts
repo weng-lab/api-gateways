@@ -33,15 +33,31 @@ export async function configureRestProxies(app: Express, urls: Service[]) {
 
 async function fetchServiceEndPoints(service: Service): Promise<ServiceRestEndPoints> {
     let restEndPoints: string[] = [];
+    let endPoints: string[] = [];
     try {
         const res = await axios.get<string[]>("/rest", { baseURL: service.url });
         restEndPoints = res.data;
+        endPoints = restEndPoints.map((rs)=>{
+            let l = rs.split("/")
+            l.forEach(s=>{
+                if(s.startsWith(":"))
+                {
+                    let idx = l.findIndex(a=>a===s)
+                    if(idx!=-1)
+                    {
+                        l.splice(idx, 1, "*")   
+                    }
+                }
+            })            
+           
+            return l.join("/")
+        })
+
     } catch(e) {
         if (e.response.status !== 404) {
             console.log(`/rest call to downstream service ${service.name} (${service.url}) failed`);
             throw e;
         }
     }
-
-    return { service, restEndPoints };
+    return { service, restEndPoints: endPoints };
 }
