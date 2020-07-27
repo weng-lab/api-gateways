@@ -62,20 +62,24 @@ spec:
   selector:
     app: genome-almanac-api
 ---
+---
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: ga-api-cert
+spec:
+  domains:
+    - ga.staging.wenglab.org
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ga-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: "staging-ga-external-ip"
-    cert-manager.io/cluster-issuer: letsencrypt
-    cert-manager.io/issue-temporary-certificate: "true"
-    acme.cert-manager.io/http01-edit-in-place: "true"
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/managed-certificates: "ga-api-cert"
 spec:
   backend:
     serviceName: genome-almanac-api-service
     servicePort: 80
-  tls:
-  - secretName: ga-tls-s
-    hosts:
-    - ga.staging.wenglab.org
