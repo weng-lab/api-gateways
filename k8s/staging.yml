@@ -29,7 +29,7 @@ spec:
           - name: SERVICE_3
             value: "histone-aggregate>http://histone-aggregate-service-service"
           - name: SERVICE_4
-            value: "factor>http://factor-service-service"  
+            value: "factor>http://factor-service-service"
           - name: SERVICE_5
             value: "peaks>http://peaks-service-service"
           - name: SERVICE_6
@@ -82,4 +82,84 @@ metadata:
 spec:
   backend:
     serviceName: genome-almanac-api-service
+    servicePort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psychscreen-api-deployment
+  labels:
+    app: psychscreen-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psychscreen-api
+  template:
+    metadata:
+      labels:
+        app: psychscreen-api
+    spec:
+      containers:
+      - name: psychscreen-api
+        image: gcr.io/devenv-215523/genome-almanac-api:${SERVICE_VERSION}
+        ports:
+        - containerPort: 3000
+        env:
+          - name: SERVICE_0
+            value: "signal>http://signal-service-service"
+          - name: SERVICE_1
+            value: "genes>http://genes-service-service"
+          - name: SERVICE_2
+            value: "peaks>http://peaks-service-service"
+          - name: SERVICE_3
+            value: "factor>http://factor-service-service"
+          - name: SERVICE_4
+            value: "expression_matrix>http://psychencode-expression-matrix-service-service"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psychscreen-api-service
+  labels:
+    app: psychscreen-api
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: psychscreen-api
+---
+---
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: psychscreen-api-cert
+spec:
+  domains:
+    - psychscreen.api.wenglab.org
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: psychscreen-api-ingress-1
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "staging-psychscreen-api-external-ip"
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/managed-certificates: "psychscreen-api-cert"
+spec:
+  backend:
+    serviceName: psychscreen-api-service
     servicePort: 80
