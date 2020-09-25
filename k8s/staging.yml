@@ -36,6 +36,8 @@ spec:
             value: "methyl>http://methyl-service-service"
           - name: SERVICE_7
             value: "gene-enhancer-interactions>http://gene-enhancer-interaction-service-service"
+          - name: SERVICE_8
+            value: "annotations>http://annotations-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
@@ -61,7 +63,6 @@ spec:
     targetPort: 3000
   selector:
     app: genome-almanac-api
----
 ---
 apiVersion: networking.gke.io/v1beta2
 kind: ManagedCertificate
@@ -141,7 +142,6 @@ spec:
     targetPort: 3000
   selector:
     app: psychscreen-api
----
 ---
 apiVersion: networking.gke.io/v1beta2
 kind: ManagedCertificate
