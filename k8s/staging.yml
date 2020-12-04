@@ -163,3 +163,89 @@ spec:
   backend:
     serviceName: psychscreen-api-service
     servicePort: 80
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: factorbook-api-deployment
+  labels:
+    app: factorbook-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: factorbook-api
+  template:
+    metadata:
+      labels:
+        app: factorbook-api
+    spec:
+      containers:
+      - name: factorbook-api
+        image: gcr.io/devenv-215523/genome-almanac-api:${SERVICE_VERSION}
+        ports:
+        - containerPort: 3000
+        env:
+          - name: SERVICE_0
+            value: "signal>http://signal-service-service"
+          - name: SERVICE_1
+            value: "genes>http://genes-service-service"
+          - name: SERVICE_2
+            value: "motifs>http://motifs-service-service"
+          - name: SERVICE_3
+            value: "histone-aggregate>http://histone-aggregate-service-service"
+          - name: SERVICE_4
+            value: "factor>http://factor-service-service"
+          - name: SERVICE_5
+            value: "peaks>http://peaks-service-service"
+          - name: SERVICE_6
+            value: "methyl>http://methyl-service-service"
+          - name: SERVICE_7
+            value: "snps>http://snps-service-service"
+          - name: SERVICE_8
+            value: "annotations>http://annotations-service-service"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: factorbook-api-service
+  labels:
+    app: factorbook-api
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: factorbook-api
+---
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: factorbook-api-cert
+spec:
+  domains:
+    - factorbook.api.wenglab.org
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: factorbook-api-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "factorbook-api-external-ip"
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/managed-certificates: "factorbook-api-cert"
+spec:
+  backend:
+    serviceName: factorbook-api-service
+    servicePort: 80
