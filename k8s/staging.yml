@@ -117,6 +117,8 @@ spec:
             value: "factor>http://factor-service-service"
           - name: SERVICE_4
             value: "expression_matrix>http://psychencode-expression-matrix-service-service"
+          - name: SERVICE_5
+            value: "snp>http://snps-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
