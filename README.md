@@ -1,5 +1,5 @@
 # API Gateway
-This repository uses Apollo Federation to create gateway APIs which communicate with backend microservices. Deployment configurations can be found in the `k8s` directory. We currently deploy two gateways, one for serving ENCODE resources (SCREEN and Factorbook) and the other PsychENCODE (PsychSCREEN).
+This repository uses Apollo Federation to create gateway APIs which communicate with backend microservices. Deployment configurations can be found in the `k8s` directory. We currently deploy three gateways, two for serving ENCODE resources (SCREEN and Factorbook) and the other PsychENCODE (PsychSCREEN).
 
 ## Configuration
 Downstream microservices are added via configuration. They are not hardcoded.
