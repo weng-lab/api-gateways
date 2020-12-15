@@ -124,7 +124,7 @@ spec:
           - name: SERVICE_7
             value: "sc>http://autoencoded-sc-service-service"
           - name: SERVICE_8
-            value: "ccres>http://ccres-service-service"
+            value: "ccres>http://ccre-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
