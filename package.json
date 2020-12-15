@@ -1,6 +1,6 @@
 {
-  "name": "genome-almanac-api",
-  "version": "1.1.0",
+  "name": "api-gateway",
+  "version": "1.1.11",
   "license": "MIT",
   "private": true,
   "scripts": {
