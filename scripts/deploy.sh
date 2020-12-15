@@ -19,6 +19,7 @@ source scripts/lib/common.sh
 
 # Run the environment shell script to set environment specific variables
 source scripts/lib/${1}.env.sh
+echo gcloud container images list-tags gcr.io/${GCR_PROJECT_ID}/${DOCKER_IMAGE_NAME} --limit=10 --format="get(tags)"
 
 # If a tag was provided, use it. Otherwise let the user select one.
 if [[ ! -z "${2}" ]]; then

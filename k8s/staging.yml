@@ -123,6 +123,8 @@ spec:
             value: "snp>http://snps-service-service"
           - name: SERVICE_7
             value: "sc>http://autoencoded-sc-service-service"
+          - name: SERVICE_8
+            value: "ccres>http://ccres-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
@@ -209,6 +211,8 @@ spec:
             value: "snps>http://snps-service-service"
           - name: SERVICE_8
             value: "annotations>http://annotations-service-service"
+          - name: SERVICE_9
+            value: "functionalvalidation>http://functional-validation-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
