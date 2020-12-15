@@ -118,6 +118,10 @@ spec:
             value: "expression_matrix>http://psychencode-expression-matrix-service-service"
           - name: SERVICE_5
             value: "annotation>http://annotations-service-service"
+          - name: SERVICE_6
+            value: "snps>http://snps-service-service"
+          - name: SERVICE_7
+            value: "sc>http://autoencoded-sc-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
