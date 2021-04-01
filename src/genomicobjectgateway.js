@@ -99,7 +99,7 @@ class GenomicObjectGateway extends ApolloGateway {
             // We don't need any resolvers for these modules; they're just
             // simple objects with a single `id` property.
             modules.push({ typeDefs: toTypeDefs(name) });
-            seenNodeTypes.add(name);
+            seenNodeTypes.add(service.name);
 
             return;
           }
@@ -119,7 +119,7 @@ class GenomicObjectGateway extends ApolloGateway {
       // The Node service must include the Node interface and a module for
       // translating the IDs into concrete types
       GenomicObject,
-      new RootModule(this.dataSources),
+      new RootModule([ ...seenNodeTypes ].map(x => this.dataSources[x])),
 
       // The Node service must also have concrete types for each type. This
       // just requires the a type definition with an `id` field for each
