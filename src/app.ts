@@ -1,11 +1,11 @@
 import 'graphql-import-node';
 import { ApolloServer } from "apollo-server-express";
-import { ApolloGateway, RemoteGraphQLDataSource } from "@apollo/gateway";
+import { RemoteGraphQLDataSource } from "@apollo/gateway";
 import express, { Express, Request, Response } from "express";
 import { configureRestProxies } from "./util/restProxy";
 import { appendUrl, Service } from './util/misc';
 import compression from 'compression';
-
+const GenomicObjectGateway = require('./genomicobjectgateway').default;
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     willSendRequest({ request, context }: any) {
@@ -20,9 +20,9 @@ function createGateway(services: Service[]): ApolloServer {
     const graphqlUrls = services.map((s: any) => {
         return { name: s.name, url: appendUrl(s.url, "graphql")}
     });
-    const gateway = new ApolloGateway({ 
+    const gateway = new GenomicObjectGateway({ 
         serviceList: graphqlUrls,
-        buildService: ({ url }) => new AuthenticatedDataSource({ url })
+        buildService: ({ url }: { url: any }) => new AuthenticatedDataSource({ url })
     });
     
     const isPlaygroundActive = process.env.NODE_ENV !== "production";

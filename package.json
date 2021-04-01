@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.1.11",
+  "version": "1.2.0",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "precommit": "yarn prettier"
   },
   "dependencies": {
-    "@apollo/gateway": "^0.12.1",
+    "@apollo/gateway": "^0.19.0",
     "apollo-server-express": "^2.10.1",
     "axios": "^0.19.2",
     "compression": "^1.7.4",
@@ -35,7 +35,7 @@
     "supertest": "^4.0.2",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.5.2",
-    "typescript": "^3.7.3"
+    "typescript": "^4.2.3"
   },
   "prettier": {
     "printWidth": 160,

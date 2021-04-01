@@ -38,6 +38,10 @@ spec:
             value: "gene-enhancer-interactions>http://gene-enhancer-interaction-service-service"
           - name: SERVICE_8
             value: "annotations>http://annotations-service-service"
+          - name: SERVICE_9
+            value: "snp>http://snps-service-service"
+          - name: SERVICE_10
+            value: "ccres>http://encode-ccre-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
@@ -213,6 +217,8 @@ spec:
             value: "annotations>http://annotations-service-service"
           - name: SERVICE_9
             value: "functionalvalidation>http://functional-validation-service-service"
+          - name: SERVICE_10
+            value: "annotatedpeaks>http://annotated-peaks-service-service"
         readinessProbe:
           httpGet:
             path: /healthz
