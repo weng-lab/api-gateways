@@ -49,6 +49,25 @@ class RootModule {
           ).then(x => x.map( xx => xx.data?.resolve || [] ).forEach(xx => rr = [ ...xx, ...rr ]));
           return rr;
         },
+        async suggest(_, { id, assembly }) {
+          let rr = [];
+          await Promise.all(
+            Object.keys(dataSources).map( k => dataSources[k].process({ request: {
+              query: `query q($id: String!, $assembly: String!) {
+                suggest(
+                  id: $id
+                  assembly: $assembly
+                ) {
+                  id
+                  assembly
+                  __typename
+                }
+              }`,
+              variables: { id, assembly }
+            }, context: {} } ) )
+          ).then(x => x.map( xx => xx.data?.suggest || [] ).forEach(xx => rr = [ ...xx, ...rr ]));
+          return rr;
+        }
       },
     };
   }
@@ -56,6 +75,10 @@ class RootModule {
   typeDefs = gql`
     type Query {
       resolve(
+        id: String!
+        assembly: String!
+      ): [GenomicObject!]!
+      suggest(
         id: String!
         assembly: String!
       ): [GenomicObject!]!
@@ -87,7 +110,7 @@ class GenomicObjectGateway extends ApolloGateway {
           if (name === 'Query') {
             return visit(node, {
               FieldDefinition(node) {
-                if (node.name.value === 'resolve') {
+                if (node.name.value === 'resolve' || node.name.value === 'suggest') {
                   return null;
                 }
               },
