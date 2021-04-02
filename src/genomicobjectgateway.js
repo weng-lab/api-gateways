@@ -30,40 +30,52 @@ class RootModule {
   constructor(dataSources) {
     this.resolvers = {
       Query: {
-        async resolve(_, { id, assembly }) {
+        async resolve(_, { id, assembly, limit }) {
           let rr = [];
           await Promise.all(
             Object.keys(dataSources).map( k => dataSources[k].process({ request: {
-              query: `query q($id: String!, $assembly: String!) {
+              query: `query q($id: String!, $assembly: String!, $limit: Int) {
                 resolve(
                   id: $id
                   assembly: $assembly
+                  limit: $limit
                 ) {
                   id
                   assembly
+                  coordinates {
+                    chromosome
+                    start
+                    end
+                  }
                   __typename
                 }
               }`,
-              variables: { id, assembly }
+              variables: { id, assembly, limit }
             }, context: {} } ) )
           ).then(x => x.map( xx => xx.data?.resolve || [] ).forEach(xx => rr = [ ...xx, ...rr ]));
           return rr;
         },
-        async suggest(_, { id, assembly }) {
+        async suggest(_, { id, assembly, limit }) {
           let rr = [];
           await Promise.all(
             Object.keys(dataSources).map( k => dataSources[k].process({ request: {
-              query: `query q($id: String!, $assembly: String!) {
+              query: `query q($id: String!, $assembly: String!, $limit: Int) {
                 suggest(
                   id: $id
                   assembly: $assembly
+                  limit: $limit
                 ) {
                   id
                   assembly
+                  coordinates {
+                    chromosome
+                    start
+                    end
+                  }
                   __typename
                 }
               }`,
-              variables: { id, assembly }
+              variables: { id, assembly, limit }
             }, context: {} } ) )
           ).then(x => x.map( xx => xx.data?.suggest || [] ).forEach(xx => rr = [ ...xx, ...rr ]));
           return rr;
@@ -77,10 +89,12 @@ class RootModule {
       resolve(
         id: String!
         assembly: String!
+        limit: Int
       ): [GenomicObject!]!
       suggest(
         id: String!
         assembly: String!
+        limit: Int
       ): [GenomicObject!]!
     }
   `;
