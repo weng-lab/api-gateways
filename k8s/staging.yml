@@ -92,6 +92,97 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: screen-api-deployment
+  labels:
+    app: screen-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: screen-api
+  template:
+    metadata:
+      labels:
+        app: screen-api
+    spec:
+      containers:
+      - name: screen-api
+        image: gcr.io/devenv-215523/genome-almanac-api:${SERVICE_VERSION}
+        ports:
+        - containerPort: 3000
+        env:
+          - name: SERVICE_0
+            value: "signal>http://signal-service-service"
+          - name: SERVICE_1
+            value: "genes>http://genes-service-service"
+          - name: SERVICE_2
+            value: "motifs>http://motifs-service-service"
+          - name: SERVICE_3
+            value: "histone-aggregate>http://histone-aggregate-service-service"
+          - name: SERVICE_4
+            value: "factor>http://factor-service-service"
+          - name: SERVICE_5
+            value: "peaks>http://peaks-service-service"
+          - name: SERVICE_6
+            value: "methyl>http://methyl-service-service"
+          - name: SERVICE_7
+            value: "gene-enhancer-interactions>http://gene-enhancer-interaction-service-service"
+          - name: SERVICE_8
+            value: "annotations>http://annotations-service-service"
+          - name: SERVICE_9
+            value: "snp>http://snps-service-service"
+          - name: SERVICE_10
+            value: "ccres>http://encode-ccre-service-service"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: screen-api-service
+  labels:
+    app: screen-api
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: screen-api
+---
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: screen-api-cert
+spec:
+  domains:
+    - screen.api.wenglab.org
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: screen-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "staging-screen-external-ip"
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/managed-certificates: "screen-api-cert"
+spec:
+  backend:
+    serviceName: screen-api-service
+    servicePort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: psychscreen-api-deployment
   labels:
     app: psychscreen-api
