@@ -42,6 +42,10 @@ spec:
             value: "snp>http://snps-service-service"
           - name: SERVICE_10
             value: "ccres>http://encode-ccre-service-service"
+          - name: SERVICE_11
+            value: "hdf>http://hdf-service-service"
+          - name: SERVICE_12
+            value: fv>http://functional-validation-service-service
         readinessProbe:
           httpGet:
             path: /healthz
@@ -133,6 +137,8 @@ spec:
             value: "snp>http://snps-service-service"
           - name: SERVICE_10
             value: "ccres>http://encode-ccre-service-service"
+          - name: SERVICE_11
+            value: psychencodesc>http://psychencode-sc-service-service
         readinessProbe:
           httpGet:
             path: /healthz
@@ -220,6 +226,8 @@ spec:
             value: "sc>http://autoencoded-sc-service-service"
           - name: SERVICE_8
             value: "ccres>http://ccre-service-service"
+          - name: SERVICE_9
+            value: xqtl>http://xqtl-service-service
         readinessProbe:
           httpGet:
             path: /healthz
