@@ -39,6 +39,8 @@ const createApp = (services: Service[], addMiddleware: AddMiddleware): Express =
     const app = express();
 
     app.use(compression());
+    app.use(express.json({ limit: '25mb' }));
+    app.use(express.urlencoded({ limit: '25mb' }));
 
     const port = process.env.PORT || 3000;
     app.set("port", port);
