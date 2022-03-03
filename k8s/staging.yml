@@ -32,8 +32,6 @@ spec:
             value: "factor>http://factor-service-service"
           - name: SERVICE_5
             value: "peaks>http://peaks-service-service"
-          - name: SERVICE_6
-            value: "methyl>http://methyl-service-service"
           - name: SERVICE_7
             value: "gene-enhancer-interactions>http://gene-enhancer-interaction-service-service"
           - name: SERVICE_8
@@ -211,7 +209,7 @@ spec:
           - name: SERVICE_0
             value: "signal>http://signal-service-service"
           - name: SERVICE_1
-            value: "genes>http://genes-service-service"
+            value: "genes>http://genes-service-pec-service"
           - name: SERVICE_2
             value: "peaks>http://peaks-service-service"
           - name: SERVICE_3
